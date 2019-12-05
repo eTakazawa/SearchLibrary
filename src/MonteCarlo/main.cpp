@@ -125,7 +125,7 @@ int main(void) {
   /* 各手の選択回数と勝った回数 */
   int visit_count[BOARD_HW * BOARD_HW] = {};
   int win_count[BOARD_HW * BOARD_HW] = {};
-  int iter_count = 100000;
+  constexpr int iter_count = 100000;
   srand(time(0));
 
   /* iter_count回対戦をシミュレートして勝率を計算する */
@@ -147,6 +147,19 @@ int main(void) {
   for (int i = 0; i < BOARD_HW * BOARD_HW; i++) {
     printf("[%2d]: %3.2f%% (%5d / %5d)\n", i, 100. * win_count[i] / visit_count[i], win_count[i], visit_count[i]);
   }
+
+  /**
+   * 100000回で実行した結果
+   * [ 0]: 60.44% ( 6670 / 11036)
+   * [ 1]: 53.37% ( 5901 / 11056)
+   * [ 2]: 59.75% ( 6706 / 11223)
+   * [ 3]: 53.10% ( 5938 / 11183)
+   * [ 4]: 69.40% ( 7646 / 11018)
+   * [ 5]: 52.67% ( 5777 / 10968)
+   * [ 6]: 60.47% ( 6797 / 11240)
+   * [ 7]: 53.44% ( 5916 / 11071)
+   * [ 8]: 60.04% ( 6728 / 11205)
+   **/
 
   return 0;
 }
