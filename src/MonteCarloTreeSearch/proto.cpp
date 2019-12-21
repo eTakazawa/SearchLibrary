@@ -566,6 +566,6 @@ int main(void) {
   // TestMctsUpdate();
   // TestMctsFunc();
   // TestMctsSearch();
-  vsCPU();
+  // vsCPU();
   return 0;
 }
