@@ -1,6 +1,10 @@
-#include <bits/stdc++.h>
+#include <string>
+#include <iostream>
+#include <vector>
 #include <limits>
 #include <random>
+#include <memory>
+#include <cassert>
 
 class XorShift {
 public:
@@ -45,6 +49,24 @@ public:
   int selected_cell;
 };
 
+std::vector<std::string> split(const std::string &s, char delim) {
+  std::vector<std::string> elems;
+  std::string item;
+  for (char ch: s) {
+    if (ch == delim) {
+      if (!item.empty())
+        elems.push_back(item);
+        item.clear();
+    }
+    else {
+      item += ch;
+    }
+  }
+  if (!item.empty())
+    elems.push_back(item);
+  return elems;
+}
+
 class State {
 public:
   enum GameState {
@@ -62,6 +84,13 @@ public:
     }
     cells_.at(MancalaConst::MIDDLE_CELL_A) = 0;
     cells_.at(MancalaConst::MIDDLE_CELL_B) = 0;
+  }
+
+  void SetCells(std::string cells) {
+    const auto& cs = split(cells, ',');
+    for (int i = 0; i < cs.size(); i++) {
+      cells_.at(i) = std::stoi(cs[i]);
+    }
   }
 
   // 取れる全ての手を返す
@@ -486,7 +515,7 @@ void TestMctsSearch() {
 void vsCPU() {
   std::shared_ptr<State> state = std::make_shared<State>();
   while (!state->is_terminate()) {
-    if (state->player_id() == 0) {
+    if (state->player_id() == 1) {
       std::cout << "*********************************" << std::endl;
       std::cout << "Your Turn!" << std::endl;
       std::cout << "Please input: [0-2]" << std::endl;
@@ -500,7 +529,7 @@ void vsCPU() {
       std::cout << "*********************************" << std::endl;
       std::cout << "Opponent Turn!" << std::endl;
       MonteCarloTreeSearch mcts(MctsNode::CreateAsRoot(state));
-      for (int t = 0; t < 1000; t++) mcts.Search();
+      for (int t = 0; t < 10000; t++) mcts.Search();
       double max_win = -1.0;
       Action max_action = MancalaConst::NUM_CELLS;
       for (const auto& child : mcts.root()->children()) {
@@ -523,6 +552,12 @@ void vsCPU() {
 }
 
 int main(void) {
+
+  std::shared_ptr<State> state = std::make_shared<State>();
+  state->SetCells("3,3,0,1,4,4,3,0");
+  state->Show();
+  // MonteCarloTreeSearch mcts(MctsNode::CreateAsRoot(state));
+  // for (int t = 0; t < 10000; t++) mcts.Search();
   // TestStateAct();
   // TestStateGenerateAllNextStates();
   // TestMctsUpdate();
