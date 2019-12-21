@@ -86,11 +86,14 @@ public:
     cells_.at(MancalaConst::MIDDLE_CELL_B) = 0;
   }
 
-  void SetCells(std::string cells) {
-    const auto& cs = split(cells, ',');
-    for (int i = 0; i < cs.size(); i++) {
-      cells_.at(i) = std::stoi(cs[i]);
+  void SetCells(std::string payload) {
+    const auto& strs = split(payload, ',');
+    assert(strs.size() == MancalaConst::NUM_CELLS + 1);
+    for (int i = 0; i < MancalaConst::NUM_CELLS; i++) {
+      cells_.at(i) = std::stoi(strs[i]);
     }
+    player_id_ = std::stoi(strs[MancalaConst::NUM_CELLS]);
+    game_state_ = kContinue;
   }
 
   // 取れる全ての手を返す
@@ -554,7 +557,7 @@ void vsCPU() {
 int main(void) {
 
   std::shared_ptr<State> state = std::make_shared<State>();
-  state->SetCells("3,3,0,1,4,4,3,0");
+  state->SetCells("3,3,0,1,4,4,3,0,0");
   state->Show();
   // MonteCarloTreeSearch mcts(MctsNode::CreateAsRoot(state));
   // for (int t = 0; t < 10000; t++) mcts.Search();
