@@ -559,8 +559,20 @@ int main(void) {
   std::shared_ptr<State> state = std::make_shared<State>();
   state->SetCells("3,3,0,1,4,4,3,0,0");
   state->Show();
-  // MonteCarloTreeSearch mcts(MctsNode::CreateAsRoot(state));
-  // for (int t = 0; t < 10000; t++) mcts.Search();
+  MonteCarloTreeSearch mcts(MctsNode::CreateAsRoot(state));
+  for (int t = 0; t < 5000; t++) mcts.Search();
+
+  double max_win = -1.0;
+  Action max_action = MancalaConst::NUM_CELLS;
+  for (const auto& child : mcts.root()->children()) {
+    double win_ratio = 1.0 * child->num_wins() / child->num_visited();
+    if (max_win < win_ratio) {
+      max_win = win_ratio;
+      max_action = child->prev_action();
+    }
+    printf("%d %.2f%%\n", child->prev_action().selected_cell, win_ratio * 100);
+  }
+  std::cout << "Act " << max_action.selected_cell << std::endl;
   // TestStateAct();
   // TestStateGenerateAllNextStates();
   // TestMctsUpdate();
