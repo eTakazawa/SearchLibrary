@@ -1,4 +1,5 @@
 #include "mancala_ai.hpp"
+#include <cstdio>
 
 int GetBestAction(int player_id, const std::vector<int>& cells, int simulateNum) {
   
@@ -21,7 +22,9 @@ int GetBestAction(int player_id, const std::vector<int>& cells, int simulateNum)
       max_win = win_ratio;
       max_action = child->prev_action();
     }
-    // printf("%d %.2f%%\n", child->prev_action().selected_cell, win_ratio * 100);
+#ifdef _DEBUG
+    fprintf(stderr, "%d %.2f%%\n", child->prev_action().selected_cell, win_ratio * 100);
+#endif
   }
   // state->Act(max_action.selected_cell);
 
