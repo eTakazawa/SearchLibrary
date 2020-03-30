@@ -7,4 +7,4 @@ set(CMAKE_CXX_FLAGS "-O2 -Wall")
 file(GLOB SRC "src/*")
 add_library(MancalaMctsLib SHARED ${SRC})
 
-target_include_directories(MancalaMctsLib PRIVATE ./include)
+target_include_directories(MancalaMctsLib PUBLIC ./include)
