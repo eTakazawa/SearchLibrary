@@ -8,6 +8,7 @@
 
 #include "mancala_const.hpp"
 #include "mancala_mcts_serach.hpp"
+#include "mancala_ai.hpp"
 
 void TestMctsFunc() {
   std::shared_ptr<MctsNode> root = std::make_shared<MctsNode>();
@@ -63,6 +64,44 @@ void TestMctsSearch() {
   }
 }
 
+void TestForWebApi() {
+  std::shared_ptr<State> state = std::make_shared<State>();
+  state->SetCells("3,3,0,1,4,4,3,0,0");
+  state->Show();
+  MonteCarloTreeSearch mcts(MctsNode::CreateAsRoot(state));
+  for (int t = 0; t < 5000; t++) mcts.Search();
+
+  double max_win = -1.0;
+  Action max_action = MancalaConst::NUM_CELLS;
+  for (const auto& child : mcts.root()->children()) {
+    double win_ratio = 1.0 * child->num_wins() / child->num_visited();
+    if (max_win < win_ratio) {
+      max_win = win_ratio;
+      max_action = child->prev_action();
+    }
+    printf("%d %.2f%%\n", child->prev_action().selected_cell, win_ratio * 100);
+  }
+  std::cout << "Act " << max_action.selected_cell << std::endl;
+}
+
+void TestGetBestAction() {
+  {
+    int player_id = 0;
+    std::vector<int> cells({3, 3, 3, 0, 3, 3, 3, 0});
+    std::cout << GetBestAction(player_id, cells, 10000) << std::endl;
+  }
+  {
+    int player_id = 1;
+    std::vector<int> cells({3, 3, 0, 1, 4, 4, 3, 0});
+    std::cout << GetBestAction(player_id, cells, 10000) << std::endl;
+  }
+  {
+    int player_id = 0;
+    std::vector<int> cells({4, 4, 0, 1, 4, 0, 4, 1});
+    std::cout << GetBestAction(player_id, cells, 10000) << std::endl;
+  }
+}
+
 void vsCPU() {
   std::shared_ptr<State> state = std::make_shared<State>();
   while (!state->is_terminate()) {
@@ -103,24 +142,8 @@ void vsCPU() {
 }
 
 int main(void) {
-
-  std::shared_ptr<State> state = std::make_shared<State>();
-  state->SetCells("3,3,0,1,4,4,3,0,0");
-  state->Show();
-  MonteCarloTreeSearch mcts(MctsNode::CreateAsRoot(state));
-  for (int t = 0; t < 5000; t++) mcts.Search();
-
-  double max_win = -1.0;
-  Action max_action = MancalaConst::NUM_CELLS;
-  for (const auto& child : mcts.root()->children()) {
-    double win_ratio = 1.0 * child->num_wins() / child->num_visited();
-    if (max_win < win_ratio) {
-      max_win = win_ratio;
-      max_action = child->prev_action();
-    }
-    printf("%d %.2f%%\n", child->prev_action().selected_cell, win_ratio * 100);
-  }
-  std::cout << "Act " << max_action.selected_cell << std::endl;
+  TestGetBestAction();
+  // TestForWebApi();
   // TestStateAct();
   // TestStateGenerateAllNextStates();
   // TestMctsUpdate();
