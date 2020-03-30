@@ -1,4 +1,4 @@
-# 基本的な探索ライブラリ
-- ビームサーチ(未)
-- 焼き鈍し(未)
-- モンテカルロ木探索（未）
+# Typical search samples
+- [x] Monte Carlo Tree Search（For board game）
+- [ ] Beam Search (WIP)
+- [ ] Simulated Annealing(WIP)
