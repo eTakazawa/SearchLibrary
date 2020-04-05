@@ -142,7 +142,8 @@ void vsCPU() {
 }
 
 int main(void) {
-  TestGetBestAction();
+  vsCPU();
+  // TestGetBestAction();
   // TestForWebApi();
   // TestStateAct();
   // TestStateGenerateAllNextStates();
