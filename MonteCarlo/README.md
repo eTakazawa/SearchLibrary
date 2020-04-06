@@ -1,7 +1,7 @@
 # Monte Carlo
 ## What's this
 This is tic tac toe AI.  
-Outputs the probability of winning with ad certain move.  
+Outputs the probability of winning with a certain move.  
 
 https://en.wikipedia.org/wiki/Monte_Carlo_method
 
